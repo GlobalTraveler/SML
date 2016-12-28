@@ -7,7 +7,7 @@ from mpl_toolkits.mplot3d import Axes3D
 '''
 Goal: estimating multinomial gaussian using perceptron
 '''
-def mlp(X, t, eta = 1e-5, gamma = 1e-9, num = int(1e3), K = 1, M = 8):
+def mlp(X, t, eta = 1e-1, gamma = 0, num = 1e3, K = 1, M = 8):
     '''
     Multi-layered-pereptron
     K = output nodes
@@ -16,12 +16,18 @@ def mlp(X, t, eta = 1e-5, gamma = 1e-9, num = int(1e3), K = 1, M = 8):
     Returns:
         prediction and error
     '''
-    # input dimension
-    D = X.shape[1]
+    num = int(num)
+    # add bias node; note the bias is absorbed in the weights of the
+    # second layer ()
+    M = M #+ 1
+    # input dimension; ass bias node
+    D = X.shape[1] + 1
+    # stack bias constant signal of ones
+    X = np.hstack((X, np.ones((X.shape[0], 1))))
     # init weights
     # hidden weights and outputweights
-    wh = np.random.randn(D, M)   #- 1/2
-    wo = np.random.randn(M, K) # - 1/2
+    wh = np.random.rand(D, M) - 1/2
+    wo = np.random.rand(M, K) - 1/2
     for i in range(num):
         # forward pass
         a = X.dot(wh)
@@ -46,10 +52,11 @@ def mlp(X, t, eta = 1e-5, gamma = 1e-9, num = int(1e3), K = 1, M = 8):
         if error == nan:
             print('nan encountered')
             break
+        # print(i)
     return preds, error
 
 
-
+# q1
 # create the target distribution
 tmp = np.arange(-2,2, .1)
 x, y = np.meshgrid(tmp, tmp)
@@ -64,33 +71,40 @@ Y = dist.pdf(X.T).reshape(x.shape)  * 3
 # shufIdx = np.random.permutation(range(X.shape[0]))
 # shufX = X[shufIdx,:]
 # shufT = targets[shufIdx]
+targets = np.array(Y.flatten(), ndmin = 2).T
 
+# dist = mv(0, 2/5)
+# tmp = np.linspace(-1,1, 100)
+# targets = np.array(dist.pdf(tmp), ndmin = 2).T  * 3
+# targets = np.array(np.sin(tmp),ndmin = 2).T
+# targets = np.array(tmp**2,ndmin = 2).T
+# targets = np.array( np.exp(-(tmp)**2), ndmin = 2).T
+# X = np.array(tmp, ndmin = 2).T
+idx = np.random.permutation(range(len(targets)))
+X = X.T
+# X = X[idx,:]
+# targets = targets[idx]
+# print(idx)
+preds, error = mlp(X, targets, eta = 1e-3,M = 8, num = 1800)
+fig, ax = subplots(1,1, subplot_kw = {'projection': '3d'})
+# ax.scatter(X, targets)
+# ax.scatter(X, preds)
+# ax.legend(['target','prediction'], loc = 0)
+# ax.set_title('SSE =' + str(error))
+ax.scatter(xs = X[:,0], ys = X[:,1], zs = preds)
+ax.scatter(xs = X[:,0], ys = X[:,1], zs = targets)
 
-dist = mv(0, 2/5)
-targets = np.array(dist.pdf(tmp), ndmin = 2).T  * 3
-targets = np.array(np.sin(tmp),ndmin = 2).T
-X = np.array(tmp, ndmin = 2)
-# set up the mlp
-# D : input dimension
-# M : hidden nodes
-# K : output nodes
-D = 1
-# add bias node
-M = 8
-K = 1
+ax.legend(['prediction', 'target'], loc = 0)
 
-# convert target to vector
-# targets = np.array(Y.flatten(), ndmin = 2).T
-X  = X.T
+fig, ax = subplots(1,1, subplot_kw = {'projection': '3d'})
+ax.plot_surface(X[:,0].reshape(x.shape), X[:,1].reshape(x.shape), preds.flatten().reshape(x.shape))
+show()
 
-
-
-
-# test case: this works
-X = np.array([[0,0],[0,1],[1,0],[1,1]])
-targets = np.array([0,1,1,0], ndmin =2 ).T
-pred, error = mlp(X, targets, eta = .1)
-print(error)
+# # test case: this works
+# X = np.array([[0,0],[0,1],[1,0],[1,1]])
+# targets = np.array([0,1,1,0], ndmin =2 ).T
+# pred, error = mlp(X, targets, eta = .1)
+# print(error)
 
 
 close('all')
