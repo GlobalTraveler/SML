@@ -34,18 +34,14 @@ def mlp(X, t, eta = 1e-1, gamma = 0, num = 1e3, K = 1, M = 8, save = 4):
     tmp = num // save
     for i in range(num + 1):
         # forward pass
-        a = X.dot(wh)
-        z = np.tanh(a)
-        # compute prediction
-        y = z.dot(wo)
+        a = X.dot(wh);  z = np.tanh(a);   y = z.dot(wo)
         # backward pass
         dk = t - y
         # compute hidden activation; note elementwise product!!
         dj = (1 - z**2) * ((wo.dot(dk.T).T))
         # dj = z * (1 - z ) * ((wo.dot(dk.T)).T)
         # update th e weights
-        E1 = z.T.dot(dk)
-        E2 = X.T.dot(dj)
+        E1 = z.T.dot(dk); E2 = X.T.dot(dj)
         wo += eta * E1 + gamma * wo
         wh += eta * E2 + gamma * wh
         error = np.sum((y-t)**2)
@@ -58,6 +54,7 @@ def mlp(X, t, eta = 1e-1, gamma = 0, num = 1e3, K = 1, M = 8, save = 4):
             print('nan encountered')
             break
         if  i % tmp == 0:
+            print('pass', i)
             preds[idx] = [y,i]
             idx += 1
         # print(i)
@@ -137,11 +134,12 @@ y = Y.reshape(tmp, tmp)
 
 X = np.vstack((X,Y)).T
 target = np.array(target, ndmin = 2).T
+idx = np.random.permutation(range(len(target)))
+X = X[idx,:]; target = target[idx]
 fig, ax = subplots(1,1, subplot_kw = {'projection': '3d'})
 ax.plot_surface(x, y, target.reshape(tmp, tmp), cmap = 'viridis')
 
 # q6 train the network on the dataset
-errors, preds = mlp(X, target, eta = 1e-8,num = 1e5,  M = 400)
-fig, ax = subplots()
-ax.plot(errors)
-show(0)
+errors, preds = mlp(X, target, eta = 1e-4,num = 5 * 1e3,  M = 1000)
+plot_results(errors, preds, target, X)
+show(1)

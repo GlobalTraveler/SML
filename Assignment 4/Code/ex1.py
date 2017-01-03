@@ -19,14 +19,6 @@ def kernel_function(x, theta):
     return sigma
 
 
-def kernel_function_alt(x, theta):
-    SuppMat = np.power(np.abs(np.outer(np.ones_like(x), x)
-                              - np.outer(x, np.ones_like(x))), 2)
-    sigma = theta[ 0 ] * np.exp(-0.5 * theta[ 1 ] * SuppMat) \
-            + theta[ 2 ] + theta[ 3 ] * np.dot(x.T, x)
-    return sigma
-
-
 # q2
 # number of points to sample
 N = 101
@@ -48,6 +40,16 @@ K = kernel_function_alt(x, theta)
 # thus it is p.sd. by construction.  (Symmetry is trivial, >= 0,
 # because every component of rows of L is real, thus it's square
 # is >= 0).
+
+'''
+semipositive definite proof: The only restriction on the kernel function is that the covariance matrix given by
+(6.62) must be positive definite. If λi is an eigenvalue ofK,
+then the corresponding eigenvalue of C will be λi + β−1.
+It is therefore sufficient that the kernel matrix k(xn,xm) be
+positive semidefinite for any pair of points xn and xm, so that λi ? 0,
+because any eigenvalue λi that is zero will still give rise to a positive eigenvalue for
+C because β> 0. [Bisschop 308]
+'''
 
 L = chol(K)
 # this gives an error. is something wrong with the kernel?
