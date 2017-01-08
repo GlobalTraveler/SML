@@ -96,7 +96,7 @@ def plot_results(errors, pred, tar, inputs):
 close('all')
 # q1
 # create the target distribution
-tmp = np.arange(-2,2, .2)
+tmp = np.arange(-2, 2, .2)
 x, y = np.meshgrid(tmp, tmp)
 
 mu = [0,0]
@@ -108,6 +108,7 @@ Y = dist.pdf(X).reshape(x.shape)  * 3
 targets = np.array(Y.flatten(), ndmin = 2).T
 
 
+# print(targets.shape); assert 0
 errors, preds = mlp(X, targets, eta = 1e-3, num = 1e3)
 # plot_results(errors, preds, targets, X)
 
@@ -140,6 +141,6 @@ fig, ax = subplots(1,1, subplot_kw = {'projection': '3d'})
 ax.plot_surface(x, y, target.reshape(tmp, tmp), cmap = 'viridis')
 
 # q6 train the network on the dataset
-errors, preds = mlp(X, target, eta = 1e-4,num = 5 * 1e3,  M = 1000)
+errors, preds = mlp(X, target, eta = 1e-4,num = 5 * 1e3,  M = 40)
 plot_results(errors, preds, target, X)
 show(1)

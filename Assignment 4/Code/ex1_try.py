@@ -1,5 +1,3 @@
-
-
 from pylab import *
 from numpy import *
 
@@ -16,7 +14,7 @@ def kernel(x1, x2, theta):
     for idx, i in enumerate(x1):
         for jdx, j in enumerate(x2):
             sigma[ idx, jdx ] = \
-                theta[ 0 ] * np.exp(- .5 * theta[ 1 ] * (i - j)**2) + \
+                theta[ 0 ] * np.exp(- .5 * theta[ 1 ] * np.sqrt((i - j)**2)) + \
                 theta[ 2 ] + theta[ 3 ] * i * j
     return sigma
 #q2
@@ -38,6 +36,8 @@ print(real(eigval))
 from scipy.stats import multivariate_normal as mv
 mu = zeros(len(x))
 prior = mv(mu, K, allow_singular=1)
+print(linalg.matrix_rank(K))
+
 samples = prior.rvs(5)
 
 fig, ax = subplots(1, 1)
@@ -90,7 +90,7 @@ samples   = yNew.rvs(50)
 fig, ax = subplots()
 ax.plot(xTrainNew, samples.T)
 show()
-print(samples)
+print(mu_new, sigma_new)
 '''
 I believe we just computed the distribution of the input x = 0, i.e. we will expect that the target
 will be around (mu_new) with variance (sigma_new), in this case it is around mu = .2.
