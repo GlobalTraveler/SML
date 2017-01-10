@@ -543,7 +543,7 @@ if __name__ == '__main__':
         labels = np.zeros(X.shape[ 0 ], randomisations)
         K = 3
         for j in np.arange(randomisations):
-            np.random.seed(8 + j)
+            np.random.seed(j)
 
             # initialisation
             init_means = np.repeat(np.mean(X, axis=0), K, axis=0).reshape(K, D)
@@ -587,7 +587,7 @@ if __name__ == '__main__':
         labels = np.zeros(X.shape[ 0 ], randomisations)
         K = 4
         for j in np.arange(randomisations):
-            np.random.seed(12 + j)
+            np.random.seed(j)
 
             # initialisation
             init_means = np.repeat(np.mean(X, axis=0), K, axis=0).reshape(K, D)
@@ -633,9 +633,12 @@ if __name__ == '__main__':
                                [ 11.95, 3.1, 0.0, 1.0 ],
                                [ 12.00, 2.5, 0.0, 2.0 ],
                                [ 12.00, 3.0, 1.0, 6.3 ]])
-
-        gmm.predict_proba(newsamples)
+        if ex32:
+            gmm.predict_proba(newsamples)
         if ex33:
             gmm3.predict_proba(newsamples)
         if ex34:
             gmm4.predict_proba(newsamples)
+        # a priori assumption from two-cluster solution:
+        # subject d has taken the substance
+        # subject c has tampered with their values
