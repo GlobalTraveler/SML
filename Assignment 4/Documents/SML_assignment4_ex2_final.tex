@@ -533,7 +533,7 @@ will yield the same gradient in the error. This `local' correlation will
 yield that the algorithm will change the weights in similar direction
 for a while, hence shuffling the data removes this `local' correlation
 structure, yielding more likely to move in the different directions,
-constraining the algorithm, yielding faster convergence.
+constraining the algorithm, yielding faster convergence. To summarize, the linearly spaced inputs will yield smaller gradients and thus slower learning as  the network 'locally' overtrains. Randomizing inputs will yield larger gradients and thus the network will be better able to adjust the weights such that the prediction is generalized over the entire dataset.
 
     \section{5}\label{section}
 	Same as in section 1.

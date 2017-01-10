@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6100 64-bit) (preloaded format=pdflatex 2016.12.20)  10 JAN 2017 17:26
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6100 64-bit) (preloaded format=pdflatex 2016.12.20)  10 JAN 2017 17:51
 entering extended mode
 **./SML_assignment4_ex2_final.tex
 (SML_assignment4_ex2_final.tex
@@ -794,7 +794,7 @@ Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 753.
 Here is how much of TeX's memory you used:
  9585 strings out of 493333
  138481 string characters out of 3139193
- 249619 words of memory out of 3000000
+ 249654 words of memory out of 3000000
  12879 multiletter control sequences out of 15000+200000
  22140 words of font info for 56 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -804,7 +804,7 @@ KTeX 2.9/fonts/type1/urw/courier/ucrb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/
 type1/urw/courier/ucrr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/couri
 er/ucrro8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/palatino/uplb8a.pfb
 ><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/palatino/uplr8a.pfb>
-Output written on SML_assignment4_ex2_final.pdf (15 pages, 1335737 bytes).
+Output written on SML_assignment4_ex2_final.pdf (15 pages, 1335979 bytes).
 PDF statistics:
  169 PDF objects out of 1000 (max. 8388607)
  33 named destinations out of 1000 (max. 500000)
