@@ -12,10 +12,10 @@ import numbers
 from sklearn import cluster
 import matplotlib as mpl
 import matplotlib.cm as cmx
+import mixture_models
 cm = mpl.colors.ListedColormap('YlGnBu')
 seashore = cm = plt.get_cmap('YlGnBu')
 scalarMap = cmx.ScalarMappable(cmap=seashore)
-plt.clf()
 #########################################################################
 # some helper routines for Gaussian Mixture Models
 #########################################################################
@@ -387,6 +387,11 @@ if __name__ == '__main__':
     # D = number of features
 
     ex31 = False
+    ex32 = True
+    ex33 = False
+    ex34 = False
+    ex35 = False
+
     if ex31:
         """
         Exercise 3.1
@@ -404,18 +409,11 @@ if __name__ == '__main__':
         ax2.set_xlabel('4th variable')
         plt.show()
 
-    ex32 = False
     if ex32:
         """
         Exercise 3.2
         """
-        EPS = np.finfo(float).eps
-
-        """
-        Gaussian Mixture Models.
-        """
         # TODO: replace this with the commented out class above!!!!
-        from sklearn import mixture
 
         # set up some stuff for the gaussian mixture models
         n_iterations = 100
@@ -425,51 +423,49 @@ if __name__ == '__main__':
         init_means = np.repeat(np.mean(X, axis=0), K, axis=0).reshape(K, D)
         init_means += np.random.random_sample((K, D)) * 2.0 - 1.0
         init_weights = np.ones(K, dtype=float) / K
-        init_precisions = np.zeros((K, D, D))
+        init_covars = np.zeros((K, D, D))
         for k in np.arange(K):
             # the initialisation cannot lead to singularity.
             Sigma_k = np.random.random_sample(D) * 4.0 + 2.0
-            init_precisions[ k, :, : ] = np.diag(1. / Sigma_k)
-        init_precisions = init_precisions[ :, :, : ]
+            init_covars[ k, :, : ] = np.diag(Sigma_k)
+        init_covars = init_covars[ :, :, : ]
 
         # Fit a Gaussian mixture with EM using five components
         loglikelihoods = np.zeros(n_iterations)
         criterions = np.zeros(n_iterations)
         convergence_print = False
-        for i in np.arange(0, n_iterations):
-            gmm = mixture.GaussianMixture(n_components=K,
-                                          covariance_type='full',
-                                          means_init=init_means,
-                                          weights_init=init_weights,
-                                          precisions_init=init_precisions,
-                                          random_state=np.random.seed(1),
-                                          max_iter=1,
-                                          tol=1e-8)
-            gmm.max_iter = i + 1
+        for i in np.arange(1, n_iterations):
+            gmm = mixture_models.MixtureModel(
+                    n_components=K,
+                    means_init=init_means,
+                    weights_init=init_weights,
+                    covars_init=init_covars,
+                    random_state=np.random.seed(1),
+                    n_iter=i)
             gmm = gmm.fit(X)
             if gmm.converged_ and not convergence_print:
                 print('converged at step {0}'.format(i))
                 convergence_print = True
-            loglikelihoods[ i ] = gmm.score(X)
+            loglikelihoods[ i ] = np.sum(gmm.score_samples(X)[ 0 ])
             criterions[ i ] = gmm.bic(X)
 
         # The final data labels:
-        labels = gmm.predict(X)
+        labels = gmm.score_samples(X)[ 1 ].argmax(axis=1)
 
         # TODO: We could make this a flash movie...
 
         # let's plot the change in the loglikelihood over iterations
         fig321 = plt.figure()
         ax1 = fig321.add_subplot(121)
-        ax1.plot(np.arange(n_iterations), loglikelihoods)
+        ax1.plot(np.arange(1, n_iterations), loglikelihoods[ 1: ])
         ax1.set_xlabel('Update step of EM-algorithm')
         ax1.set_ylabel('Log-likelihood of sample distribution')
         ax2 = fig321.add_subplot(122)
-        ax2.plot(np.arange(n_iterations), criterions)
-        ax2.set_xlabel('1st variable')
-        ax2.set_ylabel('2th variable')
+        ax2.plot(np.arange(1, n_iterations), criterions[ 1: ])
+        ax2.set_xlabel('Update step of EM-algorithm')
+        ax2.set_ylabel('Bayes information criterion')
 
-        # TODO: make this a function
+        # TODO: make this a function, add labels
         # Now plot the requested colour-coded first two variables
         fig322 = plt.figure()
         ax3 = fig322.add_subplot(111)
@@ -477,11 +473,10 @@ if __name__ == '__main__':
         set1 = X[ labels == 1, : ]
         ax3.scatter(set0[ :, 0 ], set0[ :, 1 ], color='b')
         ax3.scatter(set1[ :, 0 ], set1[ :, 1 ], color='r')
-        ax3.set_xlabel('Update step of EM-algorithm')
-        ax3.set_ylabel('Log-likelihood of sample distribution')
+        ax3.set_xlabel('x_1-dimension')
+        ax3.set_ylabel('x_2-dimension')
         plt.show()
 
-    ex33 = False
     if ex33:
         """
         Exercise 3.3
@@ -489,9 +484,9 @@ if __name__ == '__main__':
         # The above version was a test run. Now some different initialisations:
         randomisations = 8
         n_iterations = 50
-        loglikelihoods = np.zeros(n_iterations, randomisations)
-        criterions = np.zeros(n_iterations, randomisations)
-        labels = np.zeros(X.shape[ 0 ], randomisations)
+        loglikelihoods2 = np.zeros(n_iterations, randomisations)
+        criterions2 = np.zeros(n_iterations, randomisations)
+        labels2 = np.zeros(X.shape[ 0 ], randomisations)
         K = 2
         for j in np.arange(randomisations):
             np.random.seed(j)
@@ -500,37 +495,35 @@ if __name__ == '__main__':
             init_means = np.repeat(np.mean(X, axis=0), K, axis=0).reshape(K, D)
             init_means += np.random.random_sample((K, D)) * 2.0 - 1.0
             init_weights = np.ones(K, dtype=float) / K
-            init_precisions = np.zeros((K, D, D))
+            init_covars = np.zeros((K, D, D))
             for k in np.arange(K):
                 # the initialisation cannot lead to singularity.
                 Sigma_k = np.random.random_sample(D) * 4.0 + 2.0
-                init_precisions[ k, :, : ] = np.diag(1. / Sigma_k)
-            init_precisions = init_precisions[ :, :, : ]
+                init_covars[ k, :, : ] = np.diag(Sigma_k)
+            init_covars = init_covars[ :, :, : ]
 
             # Fit a Gaussian mixture with EM using five components
             convergence_print = False
             for i in np.arange(0, n_iterations):
                 # the data get quite big so we overwrite it every time
                 gmm = mixture.GaussianMixture(
-                        n_components=K, covariance_type='full', max_iter=1,
+                        n_components=K, covariance_type='full', max_iter=i,
                         means_init=init_means, weights_init=init_weights,
-                        precisions_init=init_precisions, tol=1e-8,
+                        covars_init=init_covars, tol=1e-8,
                         random_state=np.random.seed(randomisations)
                         )
-                gmm.max_iter = i + 1
                 gmm = gmm.fit(X)
                 if gmm.converged_ and not convergence_print:
                     print('converged at step {0}'.format(i))
                     convergence_print = True
-                loglikelihoods[ i, j ] = gmm.score(X)
-                criterions[ i, j ] = gmm.bic(X)
+                loglikelihoods2[ i, j ] = gmm.score_samples(X)[ 0 ]
+                criterions2[ i, j ] = gmm.bic(X)
 
             # The final data labels:
-            labels[ :, j ] = gmm.predict(X)
+            labels2 = gmm.score_samples(X)[ 1 ].argmax(axis=1)
 
             # TODO: correlations
 
-    ex34 = True
     if ex34:
         """
         Exercise 3.4
@@ -538,9 +531,9 @@ if __name__ == '__main__':
         # We move from 2 to 3 Gaussian components
         randomisations = 4
         n_iterations = 50
-        loglikelihoods = np.zeros(n_iterations, randomisations)
-        criterions = np.zeros(n_iterations, randomisations)
-        labels = np.zeros(X.shape[ 0 ], randomisations)
+        loglikelihoods3 = np.zeros(n_iterations, randomisations)
+        criterions3 = np.zeros(n_iterations, randomisations)
+        labels3 = np.zeros(X.shape[ 0 ], randomisations)
         K = 3
         for j in np.arange(randomisations):
             np.random.seed(j)
@@ -549,42 +542,41 @@ if __name__ == '__main__':
             init_means = np.repeat(np.mean(X, axis=0), K, axis=0).reshape(K, D)
             init_means += np.random.random_sample((K, D)) * 2.0 - 1.0
             init_weights = np.ones(K, dtype=float) / K
-            init_precisions = np.zeros((K, D, D))
+            init_covars = np.zeros((K, D, D))
             for k in np.arange(K):
                 # the initialisation cannot lead to singularity.
                 Sigma_k = np.random.random_sample(D) * 4.0 + 2.0
-                init_precisions[ k, :, : ] = np.diag(1. / Sigma_k)
-            init_precisions = init_precisions[ :, :, : ]
+                init_covars[ k, :, : ] = np.diag(Sigma_k)
+            init_covars = init_covars[ :, :, : ]
 
             # Fit a Gaussian mixture with EM using five components
             convergence_print = False
             for i in np.arange(0, n_iterations):
                 # the data get quite big so we overwrite it every time
                 gmm3 = mixture.GaussianMixture(
-                        n_components=K, covariance_type='full', max_iter=1,
+                        n_components=K, covariance_type='full', max_iter=i,
                         means_init=init_means, weights_init=init_weights,
-                        precisions_init=init_precisions, tol=1e-8,
+                        covars_init=init_covars, tol=1e-8,
                         random_state=np.random.seed(randomisations)
                 )
-                gmm3.max_iter = i + 1
                 gmm3 = gmm3.fit(X)
                 if gmm3.converged_ and not convergence_print:
                     print('converged at step {0}'.format(i))
                     convergence_print = True
-                loglikelihoods[ i, j ] = gmm3.score(X)
-                criterions[ i, j ] = gmm3.bic(X)
+                loglikelihoods3[ i, j ] = gmm3.score_samples(X)[ 0 ]
+                criterions3[ i, j ] = gmm3.bic(X)
 
             # The final data labels:
-            labels[ :, j ] = gmm3.predict(X)
+            labels3 = gmm.score_samples(X)[ 1 ].argmax(axis=1)
 
             # TODO: correlations, plotting
 
         # We move from 3 to 4 Gaussian components
         randomisations = 4
         n_iterations = 50
-        loglikelihoods = np.zeros(n_iterations, randomisations)
-        criterions = np.zeros(n_iterations, randomisations)
-        labels = np.zeros(X.shape[ 0 ], randomisations)
+        loglikelihoods4 = np.zeros(n_iterations, randomisations)
+        criterions4 = np.zeros(n_iterations, randomisations)
+        labels4 = np.zeros(X.shape[ 0 ], randomisations)
         K = 4
         for j in np.arange(randomisations):
             np.random.seed(j)
@@ -593,37 +585,35 @@ if __name__ == '__main__':
             init_means = np.repeat(np.mean(X, axis=0), K, axis=0).reshape(K, D)
             init_means += np.random.random_sample((K, D)) * 2.0 - 1.0
             init_weights = np.ones(K, dtype=float) / K
-            init_precisions = np.zeros((K, D, D))
+            init_covars = np.zeros((K, D, D))
             for k in np.arange(K):
                 # the initialisation cannot lead to singularity.
                 Sigma_k = np.random.random_sample(D) * 4.0 + 2.0
-                init_precisions[ k, :, : ] = np.diag(1. / Sigma_k)
-            init_precisions = init_precisions[ :, :, : ]
+                init_covars[ k, :, : ] = np.diag(Sigma_k)
+            init_covars = init_covars[ :, :, : ]
 
             # Fit a Gaussian mixture with EM using five components
             convergence_print = False
             for i in np.arange(0, n_iterations):
                 # the data get quite big so we overwrite it every time
                 gmm4 = mixture.GaussianMixture(
-                        n_components=K, covariance_type='full', max_iter=1,
+                        n_components=K, covariance_type='full', max_iter=i,
                         means_init=init_means, weights_init=init_weights,
-                        precisions_init=init_precisions, tol=1e-8,
+                        covars_init=init_covars, tol=1e-8,
                         random_state=np.random.seed(randomisations)
                 )
-                gmm4.max_iter = i + 1
                 gmm4 = gmm4.fit(X)
                 if gmm4.converged_ and not convergence_print:
                     print('converged at step {0}'.format(i))
                     convergence_print = True
-                loglikelihoods[ i, j ] = gmm4.score(X)
-                criterions[ i, j ] = gmm4.bic(X)
+                loglikelihoods4[ i, j ] = gmm4.score_samples(X)[ 0 ]
+                criterions4[ i, j ] = gmm4.bic(X)
 
             # The final data labels:
-            labels[ :, j ] = gmm4.predict(X)
+            labels4 = gmm.score_samples(X)[ 1 ].argmax(axis=1)
 
             # TODO: correlations, plotting
 
-    ex35 = True
     if ex35:
         """
         Exercise 3.5
