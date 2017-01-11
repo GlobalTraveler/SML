@@ -7,7 +7,7 @@ from mpl_toolkits.mplot3d import Axes3D
 '''
 Goal: estimating multinomial gaussian using perceptron
 '''
-def mlp(X, t, eta = 1e-1, gamma = 0, num = 1e3, K = 1, M = 8, save = 4):
+def mlp(X, t, eta = 1e-3, gamma = 0, num = 1e3, K = 1, M = 8, save = 4):
     '''
     Multi-layered-pereptron
     K = output nodes
@@ -19,7 +19,7 @@ def mlp(X, t, eta = 1e-1, gamma = 0, num = 1e3, K = 1, M = 8, save = 4):
     num = int(num)
     # add bias node; note the bias is absorbed in the weights of the
     # second layer ()
-    M = M #+ 1
+    M = M + 1
     # input dimension; ass bias node
     D = X.shape[1] + 1
     # stack bias constant signal of ones
@@ -36,14 +36,14 @@ def mlp(X, t, eta = 1e-1, gamma = 0, num = 1e3, K = 1, M = 8, save = 4):
         # forward pass
         a = X.dot(wh);  z = np.tanh(a);   y = z.dot(wo)
         # backward pass
-        dk = t - y
+        dk = y - t
         # compute hidden activation; note elementwise product!!
         dj = (1 - z**2) * ((wo.dot(dk.T).T))
         # dj = z * (1 - z ) * ((wo.dot(dk.T)).T)
         # update th e weights
         E1 = z.T.dot(dk); E2 = X.T.dot(dj)
-        wo += eta * E1 + gamma * wo
-        wh += eta * E2 + gamma * wh
+        wo -= eta * E1 + gamma * wo
+        wh -= eta * E2 + gamma * wh
         error = np.sum((y-t)**2)
         errors[i] = error
         # print(error)
@@ -109,15 +109,16 @@ targets = np.array(Y.flatten(), ndmin = 2).T
 
 
 # print(targets.shape); assert 0
-errors, preds = mlp(X, targets, eta = 1e-3, num = 1e3)
-# plot_results(errors, preds, targets, X)
-
+errors, preds = mlp(X, targets, num = 1000)
+plot_results(errors, preds, targets, X)
+print(errors[-1])
 #  q 4 : random shuffle index
 idx = np.random.permutation(range(len(targets)))
 shuffleX = X[idx,:]
 shuffleTargets = targets[idx]
-errors_shuff, preds = mlp(shuffleX, shuffleTargets, 1e-3)
-# plot_results(errors, preds, shuffleTargets, shuffleX)
+errors_shuff, preds = mlp(shuffleX, shuffleTargets, num = 1000)
+print(errors[-1])
+plot_results(errors, preds, shuffleTargets, shuffleX)
 
 # it is faster sometimes, dunno why;
 # im asuming that it hits the right values such that the constraints get updated
@@ -137,10 +138,10 @@ X = np.vstack((X,Y)).T
 target = np.array(target, ndmin = 2).T
 idx = np.random.permutation(range(len(target)))
 X = X[idx,:]; target = target[idx]
-fig, ax = subplots(1,1, subplot_kw = {'projection': '3d'})
-ax.plot_surface(x, y, target.reshape(tmp, tmp), cmap = 'viridis')
+# fig, ax = subplots(1,1, subplot_kw = {'projection': '3d'})
+# ax.plot_surface(x, y, target.reshape(tmp, tmp), cmap = 'viridis')
 
-# q6 train the network on the dataset
-errors, preds = mlp(X, target, eta = 1e-4,num = 5 * 1e3,  M = 40)
-plot_results(errors, preds, target, X)
+# # q6 train the network on the dataset
+# errors, preds = mlp(X, target, eta = 1e-4,num = 5 * 1e3,  M = 40)
+# plot_results(errors, preds, target, X)
 show(1)
