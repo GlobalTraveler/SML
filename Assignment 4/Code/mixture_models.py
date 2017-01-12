@@ -38,17 +38,17 @@ class MixtureModel:
         """
         X = np.asarray(X)
         if X.ndim == 1:
-            X = X[:, np.newaxis]
+            X = X[ :, np.newaxis ]
         if X.size == 0:
-            return np.array([]), np.empty((0, self.n_components))
-        if X.shape[1] != self.means_.shape[1]:
+            return np.array([ ]), np.empty((0, self.n_components))
+        if X.shape[ 1 ] != self.means_.shape[1]:
             raise ValueError('The shape of X is not compatible with self')
 
         if self.distrib == 'Gaussian':
             lpr = _log_multivariate_normal_density(
                     X, self.means_, self.covars_) + np.log(self.weights_)
         elif self.distrib == 'Bernoulli':
-            lpr = _log_Bernoulli_density(
+            lpr = _log_bernoulli_density(
                     X, self.means_) + np.log(self.weights_)
         else:
             raise ValueError('Did not find a distribution to score samples on')
@@ -58,16 +58,17 @@ class MixtureModel:
         return logprob, responsibilities
 
     def predict_proba(self, X):
+        """public output of the responsibilities"""
         logprob, responsibilities = self.score_samples(X)
         return responsibilities
 
     def _fit(self, X, y=None, do_prediction=False):
         # initialization step
         X = np.asarray(X, dtype=np.float64)
-        if X.shape[0] < self.n_components:
+        if X.shape[ 0 ] < self.n_components:
             raise ValueError(
                 'GMM estimation with %s components, but got only %s samples' %
-                (self.n_components, X.shape[0]))
+                (self.n_components, X.shape[ 0 ]))
 
         max_log_prob = -np.infty
 
@@ -107,7 +108,7 @@ class MixtureModel:
             self.means_ = best_params['means']
             self.weights_ = best_params['weights']
         else:
-            responsibilities = np.zeros((X.shape[0], self.n_components))
+            responsibilities = np.zeros((X.shape[ 0 ], self.n_components))
         self.is_fitted = True
         return responsibilities
 
@@ -157,8 +158,8 @@ class MixtureModel:
 def _log_multivariate_normal_density(X, means, covars, min_covar=1.e-7):
     """Log probability for covariance matrices."""
     n_samples, n_dim = X.shape
-    nmix = len(means)
-    log_prob = np.empty((n_samples, nmix))
+    K = len(means)
+    log_prob = np.empty((n_samples, K))
     for c, (mu, cv) in enumerate(zip(means, covars)):
         try:
             cv_chol = linalg.cholesky(cv, lower=True)
@@ -179,16 +180,17 @@ def _log_multivariate_normal_density(X, means, covars, min_covar=1.e-7):
     return log_prob
 
 
-def _log_Bernoulli_density(X, means):
+def _log_bernoulli_density(X, means):
     """Log probability for covariance matrices."""
     n_samples, n_dim = X.shape
-    nmix = len(means)
-    log_prob = np.empty((n_samples, nmix))
-    for n, k in product(n_samples, np.arange(nmix)):
+    K = len(means)
+    log_prob = np.zeros((n_samples, K))
+    for n, k in product(np.arange(n_samples), np.arange(K)):
         # need log (p(x_n | mu_k)), that is, log( 9.48 )
-        log_prob[ n, k ] = np.sum(np.log(means[ k ]) * X[ n, : ] + np.log(
-            np.ones_like(means[ k ] - means[ k ])) * (
-            np.ones_like(X[ n, : ]) - X[ n, : ]))
+        # add small constants, because taking the log still leads to errors
+        log_prob[ n, k ] = np.sum(np.log(means[ k ] + 10 * EPS) *
+            X[ n, : ] + np.log(np.ones_like(means[ k ]) - means[ k ] + 10 *
+            EPS) * (np.ones_like(X[ n, : ]) - X[ n, : ]))
     return log_prob
 
 
