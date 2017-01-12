@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6100 64-bit) (preloaded format=pdflatex 2016.12.20)  12 JAN 2017 12:30
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6100 64-bit) (preloaded format=pdflatex 2016.12.20)  12 JAN 2017 16:48
 entering extended mode
 **./SML_assignment4_ex1_final.tex
 (SML_assignment4_ex1_final.tex
@@ -674,12 +674,12 @@ LaTeX Info: Redefining \nameref on input line 270.
 \@outlinefile=\write4
 \openout4 = `SML_assignment4_ex1_final.out'.
 
-LaTeX Font Info:    Try loading font information for U+msa on input line 274.
+LaTeX Font Info:    Try loading font information for U+msa on input line 275.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\umsa.fd"
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 274.
+LaTeX Font Info:    Try loading font information for U+msb on input line 275.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\umsb.fd"
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
@@ -688,60 +688,64 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 LaTeX Warning: No \author given.
 
 LaTeX Font Info:    Font shape `T1/ppl/bx/n' in size <14.4> not available
-(Font)              Font shape `T1/ppl/b/n' tried instead on input line 279.
-LaTeX Font Info:    Font shape `T1/ppl/bx/n' in size <12> not available
-(Font)              Font shape `T1/ppl/b/n' tried instead on input line 281.
-LaTeX Font Info:    Try loading font information for T1+pcr on input line 286.
+(Font)              Font shape `T1/ppl/b/n' tried instead on input line 280.
+LaTeX Font Info:    Try loading font information for T1+pcr on input line 285.
 ("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\t1pcr.fd"
 File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
 )
 LaTeX Font Info:    Font shape `T1/pcr/bx/n' in size <10.95> not available
-(Font)              Font shape `T1/pcr/b/n' tried instead on input line 287.
-LaTeX Font Info:    Try loading font information for TS1+pcr on input line 290.
+(Font)              Font shape `T1/pcr/b/n' tried instead on input line 286.
+LaTeX Font Info:    Try loading font information for TS1+pcr on input line 289.
 
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\ts1pcr.fd"
 File: ts1pcr.fd 2001/06/04 font definitions for TS1/pcr.
 )
 LaTeX Font Info:    Font shape `T1/pcr/m/it' in size <10.95> not available
-(Font)              Font shape `T1/pcr/m/sl' tried instead on input line 291.
+(Font)              Font shape `T1/pcr/m/sl' tried instead on input line 290.
  [1
 
 {C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}]
-<../Figures/1.4.png, id=58, 433.62pt x 289.08pt>
+<../Figures/1.4.png, id=21, 433.62pt x 289.08pt>
 File: ../Figures/1.4.png Graphic file (type png)
  <use ../Figures/1.4.png>
-Package pdftex.def Info: ../Figures/1.4.png used on input line 341.
+Package pdftex.def Info: ../Figures/1.4.png used on input line 340.
 (pdftex.def)             Requested size: 346.89647pt x 231.27754pt.
 
 [2 <../Figures/1.4.png>]
 LaTeX Font Info:    Font shape `T1/ppl/bx/n' in size <10.95> not available
-(Font)              Font shape `T1/ppl/b/n' tried instead on input line 374.
+(Font)              Font shape `T1/ppl/b/n' tried instead on input line 373.
 
 
-LaTeX Warning: Reference `fig:1.5' on page 3 undefined on input line 374.
+LaTeX Warning: Reference `fig:1.5' on page 3 undefined on input line 373.
 
-<../Figures/1.5.png, id=66, 433.62pt x 289.08pt>
+<../Figures/1.5.png, id=30, 433.62pt x 289.08pt>
 File: ../Figures/1.5.png Graphic file (type png)
  <use ../Figures/1.5.png>
-Package pdftex.def Info: ../Figures/1.5.png used on input line 411.
+Package pdftex.def Info: ../Figures/1.5.png used on input line 410.
 (pdftex.def)             Requested size: 346.89647pt x 231.27754pt.
 
+
+Package hyperref Warning: Suppressing empty link on input line 411.
+
+
+Package hyperref Warning: Suppressing empty link on input line 411.
+
 [3]
-LaTeX Font Info:    Try loading font information for TS1+ppl on input line 432.
+LaTeX Font Info:    Try loading font information for TS1+ppl on input line 431.
 
  ("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\ts1ppl.fd"
 File: ts1ppl.fd 2001/06/04 font definitions for TS1/ppl.
 ) [4 <../Figures/1.5.png>] [5]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 548.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 547.
  [6]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 548.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 547.
  (SML_assignment4_ex1_final.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 548.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 548.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 547.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 547.
 Package rerunfilecheck Info: File `SML_assignment4_ex1_final.out' has not chang
 ed.
-(rerunfilecheck)             Checksum: D627CCBED22809130C28608E93F90A9E;525.
+(rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
 
 
 LaTeX Warning: There were undefined references.
@@ -749,16 +753,16 @@ LaTeX Warning: There were undefined references.
 
 LaTeX Warning: There were multiply-defined labels.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 548.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 547.
  ) 
 Here is how much of TeX's memory you used:
- 9580 strings out of 493333
- 138263 string characters out of 3139193
- 246387 words of memory out of 3000000
- 12872 multiletter control sequences out of 15000+200000
- 27953 words of font info for 73 fonts, out of 3000000 for 9000
+ 9563 strings out of 493333
+ 137999 string characters out of 3139193
+ 247321 words of memory out of 3000000
+ 12857 multiletter control sequences out of 15000+200000
+ 26504 words of font info for 71 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 36i,7n,37p,404b,465s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 36i,7n,37p,404b,467s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/base/8r.enc}<C:/Program Files/Mi
 KTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Program Files/MiKTeX 2.9
 /fonts/type1/public/amsfonts/cm/cmbx8.pfb><C:/Program Files/MiKTeX 2.9/fonts/ty
@@ -774,9 +778,9 @@ ype1/urw/courier/ucrr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/courie
 r/ucrro8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/palatino/uplb8a.pfb>
 <C:/Program Files/MiKTeX 2.9/fonts/type1/urw/palatino/uplr8a.pfb><C:/Program Fi
 les/MiKTeX 2.9/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on SML_assignment4_ex1_final.pdf (6 pages, 264529 bytes).
+Output written on SML_assignment4_ex1_final.pdf (6 pages, 257624 bytes).
 PDF statistics:
- 152 PDF objects out of 1000 (max. 8388607)
- 20 named destinations out of 1000 (max. 500000)
- 91 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 118 PDF objects out of 1000 (max. 8388607)
+ 19 named destinations out of 1000 (max. 500000)
+ 11 words of extra memory for PDF output out of 10000 (max. 10000000)
 
