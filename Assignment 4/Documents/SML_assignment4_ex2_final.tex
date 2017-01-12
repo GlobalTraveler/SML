@@ -445,12 +445,12 @@ regression}\label{exercise-2---neural-network-regression}
 	
 	\begin{figure}[H]
 		\centering \includegraphics{../Figures/2.2.png}
-		\caption{Results for 1.2; output of the network without any training. The output is a 2D plane since the weight have been sampled uniformly.}
+		\caption{Results for 2.2; output of the network without any training. The output is a 2D plane since the weight have been sampled uniformly.}
 		\label{fig:2.2}
 	\end{figure}
 
     \section{3}\label{section}
-	If one wants to please parse the correct parameter, i.e. plotProg = (True, interval, [x,y]). As summary of the training progress is depicted in figure \ref{fig:2.3}. Please note that cylce = 0 is actually one fully completed training cycle as python starts indexing from 0. The zero training is shown in the previous question, i.e. figure \ref{fig:2.2}.
+	If one wants to please parse the correct parameter, i.e. plotProg = (True, interval, [x,y]). As summary of the training progress is depicted in figure \ref{fig:2.3}. It is interesting to see that even after 1 full training cycle (top left plot in \ref{fig:2.3}), we already can see a gaussian shape, it only get more and more refined as a function of training cycles. The MLP learns the most when its output is very wrong compared to the target. Hence, the 2D shee from figure \ref{fig:2.2}, will be adjusted a lot after the first pass, but consecutive passes will learn less at the output is already farely close to the desired output.  Please note that cylce = 0 is actually one fully completed training cycle as python starts indexing from 0. The zero training is shown in the previous question, i.e. figure \ref{fig:2.2}.
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}98}]:} \PY{c+c1}{\PYZsh{} run at atleast 500 cycles}
          \PY{n}{num} \PY{o}{=} \PY{n+nb}{int}\PY{p}{(}\PY{l+m+mi}{5}\PY{n}{e2}\PY{p}{)} \PY{o}{+} \PY{l+m+mi}{1}
