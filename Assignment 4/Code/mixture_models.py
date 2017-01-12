@@ -134,7 +134,8 @@ class MixtureModel:
                     inverse_weights, min_covar)
         elif self.distrib == 'Bernoulli':
             # (9.60)
-            self.weights_ = weights / weights.sum()
+#            self.weights_ = weights / weights.sum()
+            self.weights_ = (weights / (weights.sum() + 10 * EPS) + EPS)
             # (9.59)
             self.means_ = weighted_X_sum * inverse_weights
         return weights
