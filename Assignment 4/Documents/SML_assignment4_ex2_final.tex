@@ -318,6 +318,9 @@ regression}\label{exercise-2---neural-network-regression}
 	\end{figure}
     \subsection{2}\label{section}
 	The code provided below allows for plotting the progress over time. The naive output of the network is depicted in figure \ref{fig:2.2}.
+	The algorithm works by performing a forward pass, then feeding the error back through the network.
+	
+	The forward pass uses bisschop eq 5.62, 5.63, 5.64. The backward pass uses the output to generate a delta (eq 5.65), and update the hidden layer weights for both the output connections and input connections (eq 5.67).
 	 
 
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -442,12 +445,12 @@ regression}\label{exercise-2---neural-network-regression}
 	
 	\begin{figure}[H]
 		\centering \includegraphics{../Figures/2.2.png}
-		\caption{Results for 1.2; output of the network without any training.}
-		\label{fig:1.2}
+		\caption{Results for 1.2; output of the network without any training. The output is a 2D plane since the weight have been sampled uniformly.}
+		\label{fig:2.2}
 	\end{figure}
 
     \section{3}\label{section}
-	If one wants to please parse the correct parameter, i.e. plotProg = (True, interval, [x,y]). As summary of the training progress is depicted in figure \ref{fig:2.3}. Please note that cylce = 0 is actually one fully completed training cycle as python starts indexing from 0. The zero training is shown in the previous question, i.e. figure \ref{fig:1.2}.
+	If one wants to please parse the correct parameter, i.e. plotProg = (True, interval, [x,y]). As summary of the training progress is depicted in figure \ref{fig:2.3}. Please note that cylce = 0 is actually one fully completed training cycle as python starts indexing from 0. The zero training is shown in the previous question, i.e. figure \ref{fig:2.2}.
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}98}]:} \PY{c+c1}{\PYZsh{} run at atleast 500 cycles}
          \PY{n}{num} \PY{o}{=} \PY{n+nb}{int}\PY{p}{(}\PY{l+m+mi}{5}\PY{n}{e2}\PY{p}{)} \PY{o}{+} \PY{l+m+mi}{1}
