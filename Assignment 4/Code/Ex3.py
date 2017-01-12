@@ -497,14 +497,10 @@ if __name__ == '__main__':
                  np.arange(1, n_iterations), loglikelihoods4[ 1:, 2 ], 'g',
                  np.arange(1, n_iterations), loglikelihoods4[ 1:, 3 ], 'b',
                  np.arange(1, n_iterations), loglikelihoods4[ 1:, 4 ], 'y',
-                 np.arange(1, n_iterations), loglikelihoods4[ 1:, 5 ],
-                 'r--',
-                 np.arange(1, n_iterations), loglikelihoods4[ 1:, 6 ],
-                 'r',
-                 np.arange(1, n_iterations), loglikelihoods4[ 1:, 7 ],
-                 'b--',
-                 np.arange(1, n_iterations), loglikelihoods4[ 1:, 0 ],
-                 'y--'
+                 np.arange(1, n_iterations), loglikelihoods4[ 1:, 5 ], 'r--',
+                 np.arange(1, n_iterations), loglikelihoods4[ 1:, 6 ], 'r',
+                 np.arange(1, n_iterations), loglikelihoods4[ 1:, 7 ], 'b--',
+                 np.arange(1, n_iterations), loglikelihoods4[ 1:, 0 ], 'y--'
                  )
         ax1.set_xlabel('Update step of EM-algorithm')
         ax1.set_ylabel('Log-likelihood of sample distribution')

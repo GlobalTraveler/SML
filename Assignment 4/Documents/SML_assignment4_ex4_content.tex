@@ -1,3 +1,160 @@
+\section{Handwritten digit recognition with Bernoulli}
+
+\subsection{Loading and visualising the data}\label{sec:41}
+First, note that loading and displaying data of course works differently in Python:
+\begin{verbatim}
+    N = 800
+    D = 28
+
+    data = np.fromfile('../Data/a012_images.dat', dtype=np.int8)
+    data = np.array(data, dtype=int)
+    data2 = data.reshape(N, D, D)  # just for visualisation
+    data = np.array(data.reshape(N, D**2), dtype=float)
+
+    fig, ax = plt.subplots()
+    for i in np.arange(data2.shape[ 0 ]):
+        ax.imshow(data2[ i, :, : ].T, cmap='gray_r')
+        plt.pause(1e-3)
+\end{verbatim}
+This shows all images consecutively. Here are some examples:
+\begin{figure}[H]
+	\centering \includegraphics{../Figures/Ex41_examples.png}
+	\caption{One sample image of each target class to be trained.}
+	\label{fig:41_examples}
+\end{figure}
+Similar classifications with Mixture models, particularly with Bernoulli distributions have been performed successfully, see e.g. "Bernoulli mixture models for binary images" by Juan and Vidal (2004), so yes, it is possible. Let's maximise our performance!
+
+\subsection{Expectation maximisation for Bernoulli mixture models}\label{sec:42}
+The class code has already been appended to the previous section of the document. It is the same class as for the GMMs, with the class variable \texttt{bmm.distrib = 'Bernoulli'} set on initialisation. This then omits a starting value for the covariances, as the responsibilities enter only in terms which can be computed directly (see below).
+We can initialise an instance analogously to exercise 3 (see section \ref{sec:43}).
+
+For \texttt{\_do\_mstep} we have replaced formulas (9.24) - (9.26) by (9.59), (9.60), but the implementation stays identical. The loglikelihood can be computed analogously to the sum part of (9.54) (see function \texttt{\_log\_bernoulli\_density}). Thus, algorithmically, the BMM is a simplification of the GMM with another density.
+
+Note, that the images are imported in vector format, to keep the old class structure (other than in part \ref{sec:41}). 
+Note also, that we included an numerically small $\epsilon$ (see (9.41), (9.42)) to avoid annihilation of the loglikelihood sum because applying only the logarithm did not work, analogously to the GMM (likely due to numerically different processing than with Matlab).
+
+\subsection{Running the algorithm}\label{sec:43}
+After \ref{sec:42} we can now run the algorithm. Let us have a look at how the class means develop (see figure \ref{fig:42_means}).
+\begin{figure}[H]
+	\centering \includegraphics{../Figures/Ex43_means.png}
+	\caption{Another example for the rapid progression of EM: after the first steps, hardly any change is visible. At the final step, the images are slightly more smeared.}
+	\label{fig:42_means}
+\end{figure}
+In the first steps, the means appear to be an overlay of the different numbers. As the weights begin to favour one of the classes, the respective digit becomes more distinct. After some steps, the class-digit is clearly readable. From this point on, the mean appears to loose contrast. This can already be interpreted as overfitting.
+
+When comparing the means to cases with $K=4$, we see that in the latter case only the 2 is really pronounced (see figure \ref{fig:43means4}), while the other classes contain mixed features from all digits. This is also the case for $K=2$ (see figure \ref{fig:43means2}), but here 2 and 3 cristallise out and 4 remains missing, while parts of it are still in the left side of the 2.
+
+\begin{figure}[H]
+	\centering \includegraphics{../Figures/Ex43_means4.png}
+	\caption{Class means when forcing $K=4$ components.}
+	\label{fig:43means4}
+\end{figure}
+\begin{figure}[H]
+	\centering \includegraphics{../Figures/Ex43_means2.png}
+	\caption{Class means when forcing $K=4$ components.}
+	\label{fig:43means2}
+\end{figure}
+
+\subsection{Performance analysis}\label{sec:4.4}
+To compare the true labels with the learned ones, we need to permutate our classes to find the right mapping to the MNIST classes.
+\begin{verbatim}
+    # now let's compare to the ground truth:
+    ground_truth = np.fromfile('../Data/a012_labels.dat', dtype=np.int8)
+    ground_truth = np.array(ground_truth, dtype=int)
+    # we need to permute the labels, to see how many numbers were
+    # identified correctly!
+    permutation_list = [ ]
+    agreement = np.zeros(int(factorial(len(np.unique(labels)))))
+    for i, p in enumerate(permutations(np.unique(labels))):
+        relabeled = np.zeros_like(labels)
+        permutation_list.append(p)
+        for j in np.arange(len(np.unique(labels))):
+            relabeled[ labels == np.unique(labels)[ j ] ] = p[ j ]
+        agreement[ i ] = np.sum(relabeled == ground_truth)
+    relabeled = np.zeros_like(labels)
+    for j in np.arange(len(np.unique(labels))):
+        relabeled[ labels == np.unique(labels)[ j ] ] = permutation_list[
+            np.argmax(agreement) ][ j ]
+    # how well did we perform?
+    performance = np.sum(relabeled == ground_truth)
+\end{verbatim}
+It turns out, that for our initial instance we already identified 743 labels correctly, which is a performance of 92.875\%.
+
+When changing the number of classes, the performance is obviously reduced. This is reflected in the loglikelihood and the BIC in comparison to the $K=3$-classification (see figures \ref{fig4:3llh3} and \ref{fig4:3llh24}).
+\begin{figure}[H]
+	\centering \includegraphics{../Figures/Ex43_llh3.png}
+	\caption{The curves for the different initialisations of the $K=3$ model. As in exercise 3, the spanned range is so large (due to rapid convergence) that the plots look virtually identical. When initialising the model with the true means, convergence is slower, because the model "cannot decide" which component to weight in favour of which digit.
+	}
+	\label{fig4:3llh3}
+\end{figure}
+\begin{figure}[H]
+	\centering \includegraphics{../Figures/Ex43_llh24.png}
+	\caption{The straight lines represent the $K=4$, the dashed lines the $K=2$ model. Obviously, both perform slower and worse in total, than the $K=3$ solutions.}
+	\label{fig4:3llh24}
+\end{figure}
+
+The differences also become evident when observing the development of class means.
+
+The performance could be improved by splitting the dataset and obtaining a validation set. This would also reduce the overfitting.
+
+\begin{figure}[H]
+	\centering \includegraphics{../Figures/Ex43_llh_all.png}
+	\caption{Direct comparison of different component numbers (this looks a bit strange). Straight lines are for 3, dotted for 2 and dashed lines for 4 clusters. The yellow line lies above two other lines, which are generated from different random seeds.}
+	\label{fig:43_means_all}
+\end{figure}
+
+\subsection{Self-made samples}
+This was quite interesting. We started with the following set of handwritten images.
+\begin{figure}[H]
+	\centering \includegraphics{../Figures/sample_orig.jpg}
+	\caption{Handwritten samples.}
+	\label{fig:45_handwritten}
+\end{figure}
+The images had to be separated for individual digits. We then repeatedly applied thresholding and scaled down the image size to obtain $28\times 28$-sized images of grayscales. The result looks like this:
+\begin{center}
+	\begin{minipage}[t]{0.3\textwidth}
+    	\begin{figure}[H]
+            \includegraphics{../Figures/2.png}
+    	\end{figure}
+	\end{minipage}
+	\begin{minipage}[t]{0.3\textwidth}
+    	\begin{figure}[H]
+            \includegraphics{../Figures/3.png}
+    	\end{figure}
+	\end{minipage}
+	\begin{minipage}[t]{0.3\textwidth}
+    	\begin{figure}[H]
+            \includegraphics{../Figures/4.png}
+    	\end{figure}
+	\end{minipage}
+\end{center}
+
+We then import the images and ask to assign probabilities for the mean classes:
+\begin{verbatim}
+    import scipy.ndimage as nd
+    D = 28
+    img1 = nd.imread('../Figures/4.png', flatten=True)/255.
+    img2 = nd.imread('../Figures/2.png', flatten=True)/255.
+    img3 = nd.imread('../Figures/3.png', flatten=True)/255.
+    img1 = np.reshape(1 - np.resize(1 - img1, (28, 28)), D**2)
+    img2 = np.reshape(1 - np.resize(1 - img2, (28, 28)), D**2)
+    img3 = np.reshape(1 - np.resize(1 - img3, (28, 28)), D**2)
+    images = np.vstack((np.vstack((img1, img2)), img3))
+    alpha = bmm.predict_proba(images)
+    print(alpha)
+\end{verbatim}
+
+Considering that there is a permutation in the labelling, the images are assigned the following way:
+\begin{verbatim}
+[[             inf              inf              inf]
+ [  6.64612757e-01   2.14713483e-38   3.35387243e-01]
+ [             inf              inf              inf]]
+\end{verbatim}
+Considering the permutation, the classifier correctly identified the second image as a 2. With the other two images there still seems to be an issue with the log...
+
+\newpage
+\section{Code}
+\begin{verbatim}
 # coding=utf-8
 """
 This file contains solutions to Exercise 4 of Assignment 4 of Bert
@@ -429,3 +586,4 @@ if __name__ == '__main__':
         ax6.set_xlabel('class 1', size=12)
 
         plt.show()
+\end{verbatim}
