@@ -139,7 +139,7 @@
     \def\gt{>}
     \def\lt{<}
     % Document parameters
-    \title{SML\_assignment4\_ex2}
+    
     
     
     
@@ -269,15 +269,15 @@
     \begin{document}
     
     
+
+    \title{Exercise 2 - Neural network
+    	regression}
     \maketitle
     
-    
 
-    
-    \section{Exercise 2 - Neural network
-regression}\label{exercise-2---neural-network-regression}
+    \label{exercise-2---neural-network-regression}
 
-    \section{1}\label{section}
+    \section*{2.1}\label{section}
 	This is fairly trivial. Essentially, we make a meshgrid and use the object from scipy to compute the pdf over this meshgrid. Figure \ref{fig:2.1} shows the target distribution obtained from this process. 
 		
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -316,7 +316,8 @@ regression}\label{exercise-2---neural-network-regression}
 		\caption{Target distribution for the MLP in the later exercises}
 		\label{fig:2.1}
 	\end{figure}
-    \subsection{2}\label{section}
+    
+    \section*{2.1}\label{section}
 	The code provided below allows for plotting the progress over time. The naive output of the network is depicted in figure \ref{fig:2.2}.
 	The algorithm works by performing a forward pass, then feeding the error back through the network.
 	
@@ -449,7 +450,7 @@ regression}\label{exercise-2---neural-network-regression}
 		\label{fig:2.2}
 	\end{figure}
 
-    \section{3}\label{section}
+    \section*{2.3}\label{section}
 	If one wants to please parse the correct parameter, i.e. plotProg = (True, interval, [x,y]). As summary of the training progress is depicted in figure \ref{fig:2.3}. It is interesting to see that even after 1 full training cycle (top left plot in \ref{fig:2.3}), we already can see a gaussian shape, it only get more and more refined as a function of training cycles. The MLP learns the most when its output is very wrong compared to the target. Hence, the 2D shee from figure \ref{fig:2.2}, will be adjusted a lot after the first pass, but consecutive passes will learn less at the output is already farely close to the desired output.  Please note that cylce = 0 is actually one fully completed training cycle as python starts indexing from 0. The zero training is shown in the previous question, i.e. figure \ref{fig:2.2}.
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}98}]:} \PY{c+c1}{\PYZsh{} run at atleast 500 cycles}
@@ -499,7 +500,7 @@ regression}\label{exercise-2---neural-network-regression}
 		\caption{This figure shows the output of the network as a function of training cycles. Note that cycle = 0 is after 1 full pass of the network. Python starts indexing from 0. This if for the non-shuffled data.}
 		\label{fig:2.3}
 	\end{figure}
-    \section{4}\label{section}
+    \section*{2.4}\label{section}
 	Permute the indices and plot the sum squared error for the training. We expect the shuffled condition to have faster convergence. Results are shown in figure \ref{fig:2.4}.
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}87}]:} \PY{c+c1}{\PYZsh{} shuffle the indices}
@@ -538,7 +539,7 @@ for a while, hence shuffling the data removes this `local' correlation
 structure, yielding more likely to move in the different directions,
 constraining the algorithm, yielding faster convergence. To summarize, the linearly spaced inputs will yield smaller gradients and thus slower learning as  the network 'locally' overtrains. Randomizing inputs will yield larger gradients and thus the network will be better able to adjust the weights such that the prediction is generalized over the entire dataset.
 
-    \section{5}\label{section}
+    \section*{2.5}\label{section}
 	Same as in section 1.
 	The target distribution is shown in figure \ref{fig:2.5}. 
 	
@@ -575,7 +576,7 @@ constraining the algorithm, yielding faster convergence. To summarize, the linea
 		\label{fig:2.5}
 	\end{figure}
 
-    \section{6}\label{section}
+    \section*{2.6}\label{section}
 	The training error and final prediction are shown in figures \ref{fig:2.62}, \ref{fig:2.61}.
 	Explanation is below the code block.
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -640,7 +641,7 @@ are notorious for being sensitive to how the data is represented.
 Another might be instead of taking a global learning rate, is make it
 adaptive (see conjugate gradient descent, momentum etc).
 
-    \section{7}\label{section}
+    \section*{2.7}\label{section}
 
     We are using python hence netlab toolbox is not available to us. We
 opted for the neurolab toolbox which has a conjugate gradient method.
